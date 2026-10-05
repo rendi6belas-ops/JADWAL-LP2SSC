@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Diklat · Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0a0a14;
+    --surface: rgba(255,255,255,0.04);
+    --surface-2: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.14);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --dim: #64748b;
+    --accent: #8b5cf6;
+    --accent-2: #06b6d4;
+    --ok: #10b981;
+    --glow: 0 0 40px rgba(139,92,246,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+    animation: float 18s ease-in-out infinite;
+  }
+  body::before {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #8b5cf6, transparent 70%);
+    top: -180px; left: -120px;
+  }
+  body::after {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #06b6d4, transparent 70%);
+    bottom: -220px; right: -160px;
+    animation-delay: -9s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, -40px) scale(1.15); }
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    display: grid; place-items: center;
+    font-size: 24px;
+    box-shadow: var(--glow);
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #fff 30%, #8b5cf6 70%, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header .sub {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    transition: border-color .3s;
+    animation: fadeUp .5s cubic-bezier(.2,.8,.2,1) backwards;
+  }
+  .card:hover { border-color: var(--border-2); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-num {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    display: grid; place-items: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .card-head h2 {
+    font-size: 0.72rem;
+    margin: 0;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .eye-btn {
+    margin-left: auto;
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all .2s;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .eye-btn:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    border-color: var(--border-2);
+    transform: translateY(-1px);
+  }
+  .eye-btn.on {
+    background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.15));
+    color: #fff;
+    border-color: rgba(139,92,246,0.4);
+    box-shadow: 0 4px 16px rgba(139,92,246,0.2);
+  }
+  .eye-btn svg { width: 17px; height: 17px; }
+  .eye-btn .eye-open { display: block; }
+  .eye-btn .eye-closed { display: none; }
+  .eye-btn.on .eye-open { display: none; }
+  .eye-btn.on .eye-closed { display: block; }
+
+  .collapsible-wrap {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1), margin-top .3s;
+    margin-top: 18px;
+  }
+  .collapsible-wrap.collapsed {
+    grid-template-rows: 0fr;
+    margin-top: 0;
+  }
+  .collapsible-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .date-box {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+  }
+  input[type=date] {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(0,0,0,0.25);
+    transition: all .2s;
+    color-scheme: dark;
+  }
+  input[type=date]:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(139,92,246,0.08);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+  }
+  input[type=date]::-webkit-calendar-picker-indicator {
+    filter: invert(0.75);
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 6px;
+  }
+  .day-badge {
+    padding: 12px 20px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(6,182,212,0.18));
+    border: 1px solid rgba(139,92,246,0.4);
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #fff;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(139,92,246,0.2);
+    min-width: 130px;
+    justify-content: center;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin: 0 -6px;
+    padding: 0 6px;
+  }
+  .table-scroll::-webkit-scrollbar { height: 8px; }
+  .table-scroll::-webkit-scrollbar-track { background: transparent; }
+  .table-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-2);
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+    font-size: 0.84rem;
+    min-width: 640px;
+  }
+  th, td {
+    padding: 9px 11px;
+    text-align: left;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid transparent;
+    transition: all .2s;
+  }
+  th {
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: transparent;
+    text-align: center;
+  }
+  th.aktif {
+    background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(6,182,212,0.2));
+    color: #fff;
+    border-color: rgba(139,92,246,0.4);
+    box-shadow: 0 4px 16px rgba(139,92,246,0.2);
+  }
+  th:first-child, th:nth-child(2) { text-align: left; }
+
+  td { border-color: var(--border); vertical-align: middle; }
+  td.aktif {
+    background: rgba(139,92,246,0.06);
+    border-color: rgba(139,92,246,0.2);
+  }
+
+  td.td-waktu {
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--accent-2);
+    font-weight: 500;
+    background: rgba(6,182,212,0.05);
+    text-align: center;
+  }
+
+  td.td-lokasi {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  td.td-lokasi:hover {
+    background: rgba(6,182,212,0.12);
+    border-color: rgba(6,182,212,0.3);
+    color: var(--text);
+  }
+
+  td.td-hari {
+    min-width: 92px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    line-height: 1.35;
+  }
+  td.td-hari:hover {
+    background: rgba(139,92,246,0.14);
+    border-color: rgba(139,92,246,0.3);
+    transform: translateY(-1px);
+  }
+  td.td-hari.kosong { color: var(--dim); }
+
+  .hint {
+    font-size: 0.72rem;
+    color: var(--dim);
+    margin: 14px 0 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .hint::before {
+    content: '💡';
+    flex-shrink: 0;
+  }
+
+  /* ====== Hasil & Tombol ====== */
+  .hasil-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .hasil-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .hasil-textarea {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    line-height: 1.7;
+    min-height: 320px;
+    background: #06060d;
+    color: #cbd5e1;
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 14px;
+    letter-spacing: 0.01em;
+    width: 100%;
+    resize: vertical;
+  }
+  .hasil-textarea:focus { outline: none; }
+
+  .copy-btn, .wa-btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 11px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .copy-btn {
+    margin-left: auto;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    box-shadow: 0 6px 20px rgba(139,92,246,0.35);
+  }
+  .copy-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .copy-btn > * { position: relative; z-index: 1; }
+  .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(139,92,246,0.45); }
+  .copy-btn:hover::before { opacity: 1; }
+  .copy-btn:active { transform: translateY(0); }
+  .copy-btn.ok {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+  }
+
+  .wa-btn {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
+  }
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(34,197,94,0.45);
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+  }
+  .wa-btn:active { transform: translateY(0); }
+  .wa-btn > * { position: relative; z-index: 1; }
+
+  /* ====== Modal ====== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4,4,12,0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-box {
+    background: #10101d;
+    border: 1px solid var(--border-2);
+    border-radius: 22px;
+    padding: 22px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    transform: scale(.94) translateY(8px);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(139,92,246,0.1);
+  }
+  .modal-overlay.active .modal-box {
+    transform: scale(1) translateY(0);
+  }
+  .modal-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .modal-head h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 800;
+    background: linear-gradient(120deg, #fff, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .modal-head .kelas-tag {
+    margin-left: 10px;
+    font-size: 0.66rem;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: rgba(139,92,246,0.18);
+    border: 1px solid rgba(139,92,246,0.35);
+    color: #c4b5fd;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .modal-close {
+    margin-left: auto;
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 0.8rem;
+    transition: all .2s;
+    padding: 0;
+  }
+  .modal-close:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .modal-sub {
+    font-size: 0.7rem;
+    color: var(--dim);
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+
+  .tutor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-bottom: 4px;
+  }
+  .tutor-list::-webkit-scrollbar { width: 6px; }
+  .tutor-list::-webkit-scrollbar-thumb {
+    background: var(--border-2);
+    border-radius: 3px;
+  }
+  .tutor-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all .18s;
+    width: 100%;
+  }
+  .tutor-item:hover {
+    background: rgba(139,92,246,0.12);
+    border-color: rgba(139,92,246,0.35);
+    transform: translateX(3px);
+  }
+  .tutor-item .tutor-icon { font-size: 1.05rem; line-height: 1; }
+  .tutor-item .tutor-name { flex: 1; }
+  .tutor-item .tutor-sub {
+    font-size: 0.68rem;
+    color: var(--dim);
+    font-weight: 500;
+  }
+  .tutor-item.selected {
+    background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(6,182,212,0.18));
+    border-color: rgba(139,92,246,0.5);
+    box-shadow: 0 4px 14px rgba(139,92,246,0.2);
+  }
+  .tutor-item.selected::after {
+    content: '✓';
+    color: #a78bfa;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 12px 40px; }
+    header h1 { font-size: 1.2rem; }
+    .logo { width: 44px; height: 44px; font-size: 20px; border-radius: 13px; }
+    .card { padding: 16px 16px; border-radius: 18px; }
+    .hasil-textarea { min-height: 260px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">📅</div>
+    <div>
+      <h1>Generator Jadwal Diklat</h1>
+      <div class="sub">Pilih tanggal · tiap program punya template sendiri</div>
+    </div>
+  </header>
+
+  <!-- ===== 1. PILIH TANGGAL ===== -->
+  <section class="card">
+    <div class="card-head">
+      <div class="card-num">1</div>
+      <h2>Pilih Tanggal</h2>
+    </div>
+    <div class="date-row">
+      <div class="date-box">
+        <input type="date" id="tanggal">
+      </div>
+      <div class="day-badge">
+        <span>📅</span>
+        <span id="day-label">Senin</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROGRAMS (dibuat via JS) ===== -->
+  <div id="programs-container"></div>
+</div>
+
+<!-- ===== MODAL PILIH MATERI ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>Pilih Materi</h3>
+      <span class="kelas-tag" id="modal-kelas-tag">—</span>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <p class="modal-sub">Tutor akan otomatis terisi sesuai mapel.</p>
+    <div class="tutor-list" id="tutor-list"></div>
+  </div>
+</div>
+
+<script>
+/* ================== KONSTANTA ================== */
+const HARI = ["Senin", "Selasa", "Rabu", "Kamis"];
+const BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const HARI_PANJANG = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+
+const WA_NUMBER = "6285717978659";
+
+/* Program (kelas) — tiap program akan jadi satu section sendiri */
+const PROGRAMS = [
+  { key: "regoff",     name: "Reguler Offline" },
+  { key: "regon",      name: "Reguler Online" },
+  { key: "dsmb",       name: "DSMB" },
+  { key: "mahasantri", name: "Mahasantri" }
+];
+
+/* Mapel → Tutor (auto), per program, sesuai Excel */
+const TUTOR_BY_MAPEL = {
+  regoff: {
+    "VOCABULARY": "MS. DHITA",
+    "EXPRESSION": "MS. LASMI",
+    "GRAMMAR": "MS. ROSNANI",
+    "SPEAKING": "MS. ERN"
+  },
+  regon: {
+    "VOCABULARY": "MS. DHITA",
+    "CONVERSATION": "MR. ALAN",
+    "SPEAKING": "MS. ERN",
+    "EXPRESSION": "MS. LASMI"
+  },
+  dsmb: {
+    "SPEAKING": "MS. ERN",
+    "GRAMMAR": "MS. NANI",
+    "EXPRESSION & VOCABULARY": "MS. LASMI",
+    "HIRGANA, KATAKANA, TANGGO": "RENDI SENSEI",
+    "MANAKIBAN": ""
+  },
+  mahasantri: {
+    "EXPRESSIONS & VOCABULARY": "MS. DHITA",
+    "GRAMMAR & INTERVIEW": "MS. ROSNANI",
+    "KALAM & MUFRADHAT": "USTAZAH IMPI",
+    "SPEAKING & CONVERSATION": "MS. ERN"
+  }
+};
+
+/* Data jadwal dari Excel (Jumat dihapus — tidak ada jadwal) */
+const DATA = [
+  { prog: "regoff", lokasi: "RPS", waktu: "09.00-10.30",
+    hari: { Senin: "VOCABULARY", Selasa: "EXPRESSION", Rabu: "GRAMMAR", Kamis: "SPEAKING" } },
+
+  { prog: "regon", lokasi: "Online", waktu: "16.00-17.31",
+    hari: { Senin: "VOCABULARY", Selasa: "VOCABULARY", Rabu: "SPEAKING", Kamis: "EXPRESSION" } },
+  { prog: "regon", lokasi: "Online", waktu: "20.00-21.30",
+    hari: { Senin: "CONVERSATION", Selasa: "CONVERSATION", Rabu: "SPEAKING", Kamis: "EXPRESSION" } },
+
+  { prog: "dsmb", lokasi: "RPS", waktu: "16.00-17.30",
+    hari: { Senin: "SPEAKING", Selasa: "GRAMMAR", Rabu: "HIRGANA, KATAKANA, TANGGO", Kamis: "GRAMMAR" } },
+  { prog: "dsmb", lokasi: "RPS", waktu: "20.00-21.30",
+    hari: { Senin: "EXPRESSION & VOCABULARY", Selasa: "HIRGANA, KATAKANA, TANGGO", Rabu: "MANAKIBAN", Kamis: "HIRGANA, KATAKANA, TANGGO" } },
+
+  { prog: "mahasantri", lokasi: "RPS", waktu: "16.00-17.00",
+    hari: { Senin: "", Selasa: "", Rabu: "EXPRESSIONS & VOCABULARY", Kamis: "" } },
+  { prog: "mahasantri", lokasi: "RPS", waktu: "20.00-21.00",
+    hari: { Senin: "GRAMMAR & INTERVIEW", Selasa: "KALAM & MUFRADHAT", Rabu: "", Kamis: "SPEAKING & CONVERSATION" } }
+];
+
+const SAPAAN  = "Assalamu'alaikum warahmatullahi Wabarakatuh ";
+const PENUTUP = "Sekian informasi yang dapat kami sampaikan, Wassalamu'alaikum warahmatullahi Wabarakatuh ☺️🙏🏻";
+
+/* ================== HELPER ================== */
+function isKosong(v) {
+  const t = (v || '').trim();
+  return !t || t === '—' || t === '–' || t === '-';
+}
+function isFemale(name) {
+  const n = (name || '').trim().toLowerCase();
+  if (!n) return false;
+  if (n.startsWith('mr') || n.startsWith('bapak') || n.startsWith('ustadz ')) return false;
+  if (n.includes('alan') || n.includes('rendi')) return false;
+  return true;
+}
+function icon(tutor) { return isFemale(tutor) ? '👩‍🏫' : '👨‍🏫'; }
+function tanggalPanjang(val) {
+  if (!val) return '';
+  const d = new Date(val + 'T00:00:00');
+  if (isNaN(d)) return '';
+  return `${String(d.getDate()).padStart(2,'0')} ${BULAN[d.getMonth()]} ${d.getFullYear()}`;
+}
+function formatWaktu(w) { return (w || '').replace(/\s*-\s*/g, ' - ') + ' WIB'; }
+function parseTime(w) {
+  const m = (w || '').match(/(\d{1,2})[.:](\d{2})/);
+  return m ? (+m[1]) * 60 + (+m[2]) : 0;
+}
+function getDayFromDate(val) {
+  if (!val) return 'Senin';
+  const d = new Date(val + 'T00:00:00');
+  if (isNaN(d)) return 'Senin';
+  const n = HARI_PANJANG[d.getDay()];
+  return HARI.includes(n) ? n : 'Senin';
+}
+
+/* ================== BUILD UI PER PROGRAM ================== */
+function buildProgramSections() {
+  const container = document.getElementById('programs-container');
+  container.innerHTML = '';
+
+  PROGRAMS.forEach((p, i) => {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.dataset.prog = p.key;
+    sec.style.animationDelay = (0.05 * (i + 1)) + 's';
+
+    sec.innerHTML = `
+      <div class="card-head">
+        <div class="card-num">${i + 2}</div>
+        <h2>${p.name}</h2>
+        <button class="eye-btn on" data-eye="tabel-${p.key}" title="Sembunyikan / Tampilkan tabel">
+          <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+            <line x1="1" y1="1" x2="23" y2="23"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="collapsible-wrap collapsed" id="tabel-${p.key}-wrap">
+        <div class="collapsible-inner">
+          <div class="table-scroll">
+            <table id="tabel-${p.key}">
+              <thead>
+                <tr>
+                  <th style="min-width:110px">Waktu</th>
+                  <th style="min-width:80px">Lokasi</th>
+                  ${HARI.map(h => `<th data-head="${h}">${h}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="hint">Klik sel mapel untuk memilih materi (tutor otomatis). Klik sel lokasi untuk mengubah.</p>
+        </div>
+      </div>
+
+      <div class="hasil-head">
+        <span class="hasil-label">Hasil · ${p.name}</span>
+        <button class="copy-btn" data-copy="${p.key}">
+          <span>📋</span><span>Salin</span>
+        </button>
+        <button class="wa-btn" data-wa="${p.key}">
+          <span>💬</span><span>Kirim WA</span>
+        </button>
+      </div>
+      <textarea id="hasil-${p.key}" class="hasil-textarea" readonly spellcheck="false"></textarea>
+    `;
+    container.appendChild(sec);
+  });
+
+  PROGRAMS.forEach(p => renderTableBody(p.key));
+  attachEvents();
+}
+
+/* ================== RENDER TABEL PER PROGRAM ================== */
+function renderTableBody(progKey) {
+  const tbody = document.querySelector(`#tabel-${progKey} tbody`);
+  tbody.innerHTML = '';
+
+  DATA.filter(r => r.prog === progKey).forEach(r => {
+    const tr = document.createElement('tr');
+    tr.dataset.waktu = r.waktu;
+    tr.dataset.lokasi = r.lokasi;
+
+    const tdW = document.createElement('td');
+    tdW.className = 'td-waktu';
+    tdW.textContent = r.waktu;
+    tr.appendChild(tdW);
+
+    const tdL = document.createElement('td');
+    tdL.className = 'td-lokasi';
+    tdL.textContent = r.lokasi;
+    tdL.addEventListener('click', () => {
+      const nv = prompt('Ubah lokasi:', tdL.textContent.trim());
+      if (nv !== null) {
+        tdL.textContent = nv.trim() || '-';
+        buildMessageFor(progKey);
+      }
+    });
+    tr.appendChild(tdL);
+
+    HARI.forEach(h => {
+      const td = document.createElement('td');
+      td.className = 'td-hari';
+      td.dataset.hari = h;
+      const v = (r.hari[h] || '').trim();
+      td.textContent = v || '—';
+      if (!v) td.classList.add('kosong');
+      td.addEventListener('click', () => openModal(td, progKey));
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+/* ================== READ TABEL ================== */
+function readTabel(progKey) {
+  return [...document.querySelectorAll(`#tabel-${progKey} tbody tr`)].map(tr => {
+    const hari = {};
+    HARI.forEach(h => {
+      hari[h] = tr.querySelector(`td[data-hari="${h}"]`).textContent.trim();
+    });
+    return {
+      lokasi: tr.querySelector('td.td-lokasi').textContent.trim(),
+      waktu: tr.dataset.waktu,
+      hari
+    };
+  });
+}
+
+/* ================== BUILD MESSAGE PER PROGRAM ================== */
+function buildMessageFor(progKey) {
+  const prog = PROGRAMS.find(p => p.key === progKey);
+  const tanggal = document.getElementById('tanggal').value;
+  const day = getDayFromDate(tanggal);
+
+  const rows = readTabel(progKey);
+  const items = [];
+  rows.forEach(r => {
+    const mapel = (r.hari[day] || '').trim();
+    if (isKosong(mapel)) return;
+    const tutor = (TUTOR_BY_MAPEL[progKey] || {})[mapel] || '';
+    items.push({ waktu: r.waktu, lokasi: r.lokasi, mapel, tutor });
+  });
+  items.sort((a, b) => parseTime(a.waktu) - parseTime(b.waktu));
+
+  const lines = [];
+  lines.push(SAPAAN);
+  lines.push('');
+  lines.push(`di Informasikan bahwa hari ini *Diklat ${prog.name}* akan di mulai pada ;`);
+  lines.push('');
+  lines.push(`📅 : ${day}, ${tanggalPanjang(tanggal)}`);
+
+  if (!items.length) {
+    lines.push('');
+    lines.push('(Tidak ada jadwal pada hari ini)');
+  } else {
+    items.forEach(s => {
+      lines.push('');
+      lines.push(`        ⏰ : ${formatWaktu(s.waktu)}`);
+      lines.push(`        📍 : ${s.lokasi}`);
+      lines.push(`        🔰 : ${s.mapel}`);
+      if (s.tutor) lines.push(`        ${icon(s.tutor)} : ${s.tutor}`);
+    });
+  }
+
+  lines.push('');
+  lines.push(PENUTUP);
+
+  document.getElementById('hasil-' + progKey).value = lines.join('\n');
+}
+
+function buildAllMessages() {
+  PROGRAMS.forEach(p => buildMessageFor(p.key));
+}
+
+/* ================== HARI BADGE & HIGHLIGHT ================== */
+function updateDayAndHighlight() {
+  const val = document.getElementById('tanggal').value;
+  const day = getDayFromDate(val);
+  document.getElementById('day-label').textContent = day;
+
+  document.querySelectorAll('th[data-head]').forEach(th => {
+    th.classList.toggle('aktif', th.dataset.head === day);
+  });
+  document.querySelectorAll('td[data-hari]').forEach(td => {
+    td.classList.toggle('aktif', td.dataset.hari === day);
+  });
+}
+
+/* ================== EVENTS ================== */
+function attachEvents() {
+  /* Eye toggle per tabel */
+  document.querySelectorAll('.eye-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.eye; // e.g. tabel-regoff
+      const wrap = document.getElementById(key + '-wrap');
+      const isCollapsed = wrap.classList.toggle('collapsed');
+      btn.classList.toggle('on', !isCollapsed);
+    });
+  });
+
+  /* Copy button */
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const key = this.dataset.copy;
+      const ta = document.getElementById('hasil-' + key);
+      try {
+        await navigator.clipboard.writeText(ta.value);
+      } catch (err) {
+        ta.removeAttribute('readonly');
+        ta.select();
+        document.execCommand('copy');
+        ta.setAttribute('readonly', 'readonly');
+      }
+      const spans = btn.querySelectorAll('span');
+      const oldIcon = spans[0].textContent;
+      const oldText = spans[1].textContent;
+      btn.classList.add('ok');
+      spans[0].textContent = '✅';
+      spans[1].textContent = 'Tersalin!';
+      setTimeout(() => {
+        spans[0].textContent = oldIcon;
+        spans[1].textContent = oldText;
+        btn.classList.remove('ok');
+      }, 1600);
+    });
+  });
+
+  /* WhatsApp button */
+  document.querySelectorAll('.wa-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const key = this.dataset.wa;
+      const text = document.getElementById('hasil-' + key).value || '';
+      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    });
+  });
+}
+
+/* ================== MODAL PILIH MATERI ================== */
+let activeCell = null;
+let activeProg = null;
+
+function openModal(td, progKey) {
+  activeCell = td;
+  activeProg = progKey;
+  renderSubjectList();
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  activeCell = null;
+  activeProg = null;
+}
+function renderSubjectList() {
+  const list = document.getElementById('tutor-list');
+  const tag = document.getElementById('modal-kelas-tag');
+  const current = activeCell ? activeCell.textContent.trim() : '';
+  const prog = PROGRAMS.find(p => p.key === activeProg);
+  tag.textContent = prog ? prog.name : '—';
+
+  list.innerHTML = '';
+
+  const empty = document.createElement('button');
+  empty.className = 'tutor-item' + (isKosong(current) ? ' selected' : '');
+  empty.innerHTML = `<span class="tutor-icon">—</span><span class="tutor-name">Kosong</span><span class="tutor-sub">hapus</span>`;
+  empty.onclick = () => selectSubject('');
+  list.appendChild(empty);
+
+  const map = TUTOR_BY_MAPEL[activeProg] || {};
+  Object.keys(map).forEach(mapel => {
+    const tutor = map[mapel];
+    const isF = isFemale(tutor);
+    const btn = document.createElement('button');
+    btn.className = 'tutor-item' + (current === mapel ? ' selected' : '');
+    btn.innerHTML =
+      `<span class="tutor-icon">${isF ? '👩‍🏫' : '👨‍🏫'}</span>` +
+      `<span class="tutor-name">${mapel}</span>` +
+      `<span class="tutor-sub">${tutor || '—'}</span>`;
+    btn.onclick = () => selectSubject(mapel);
+    list.appendChild(btn);
+  });
+}
+function selectSubject(name) {
+  if (!activeCell) return;
+  activeCell.textContent = name || '—';
+  activeCell.classList.toggle('kosong', !name);
+  const prog = activeProg;
+  closeModal();
+  buildMessageFor(prog);
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target.id === 'modal') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('modal').classList.contains('active')) {
+    closeModal();
+  }
+});
+
+/* ================== INIT ================== */
+buildProgramSections();
+
+(function setTodayDate() {
+  const el = document.getElementById('tanggal');
+  if (el.value) return;
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  el.value = `${yyyy}-${mm}-${dd}`;
+})();
+
+document.getElementById('tanggal').addEventListener('change', () => {
+  updateDayAndHighlight();
+  buildAllMessages();
+});
+
+updateDayAndHighlight();
+buildAllMessages();
+</script>
+</body>
+</html>
