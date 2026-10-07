@@ -124,6 +124,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
   .card-num {
     width: 26px; height: 26px;
@@ -143,27 +144,40 @@
     color: var(--muted);
     font-weight: 700;
   }
-
-  .eye-btn {
+  .card-head .head-actions {
     margin-left: auto;
-    width: 38px; height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .reset-btn, .eye-btn {
+    height: 38px;
     border-radius: 11px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--muted);
-    display: grid;
-    place-items: center;
     cursor: pointer;
     transition: all .2s;
     padding: 0;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 700;
   }
-  .eye-btn:hover {
+  .reset-btn:hover, .eye-btn:hover {
     background: var(--surface-2);
     color: var(--text);
     border-color: var(--border-2);
     transform: translateY(-1px);
   }
+  .reset-btn { padding: 0 12px; letter-spacing: 0.03em; }
+  .eye-btn { width: 38px; }
   .eye-btn.on {
     background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.15));
     color: #fff;
@@ -176,21 +190,6 @@
   .eye-btn.on .eye-open { display: none; }
   .eye-btn.on .eye-closed { display: block; }
 
-  .collapsible-wrap {
-    display: grid;
-    grid-template-rows: 1fr;
-    transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1), margin-top .3s;
-    margin-top: 18px;
-  }
-  .collapsible-wrap.collapsed {
-    grid-template-rows: 0fr;
-    margin-top: 0;
-  }
-  .collapsible-inner {
-    overflow: hidden;
-    min-height: 0;
-  }
-
   .date-row {
     display: flex;
     align-items: center;
@@ -198,11 +197,7 @@
     margin-top: 18px;
     flex-wrap: wrap;
   }
-  .date-box {
-    flex: 1;
-    min-width: 220px;
-    position: relative;
-  }
+  .date-box { flex: 1; min-width: 220px; position: relative; }
   input[type=date] {
     width: 100%;
     padding: 14px 18px;
@@ -245,112 +240,272 @@
     justify-content: center;
   }
 
-  .table-scroll {
+  .info-note {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(139,92,246,0.08);
+    border: 1px dashed rgba(139,92,246,0.3);
+    border-radius: 11px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .info-note b { color: #c4b5fd; }
+
+  /* ====== Collapsible ====== */
+  .collapse-wrap {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1), margin-top .3s;
+    margin-top: 16px;
+  }
+  .collapse-wrap.collapsed {
+    grid-template-rows: 0fr;
+    margin-top: 0;
+  }
+  .collapse-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ====== Jadwal Lengkap ====== */
+  .full-scroll {
     overflow-x: auto;
     margin: 0 -6px;
     padding: 0 6px;
   }
-  .table-scroll::-webkit-scrollbar { height: 8px; }
-  .table-scroll::-webkit-scrollbar-track { background: transparent; }
-  .table-scroll::-webkit-scrollbar-thumb {
+  .full-scroll::-webkit-scrollbar { height: 8px; }
+  .full-scroll::-webkit-scrollbar-thumb {
     background: var(--border-2);
     border-radius: 4px;
   }
 
-  table {
+  .schedule-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 4px;
-    font-size: 0.84rem;
-    min-width: 640px;
+    font-size: 0.72rem;
+    min-width: 900px;
   }
-  th, td {
-    padding: 9px 11px;
-    text-align: left;
-    border-radius: 10px;
-    background: var(--surface);
-    border: 1px solid transparent;
-    transition: all .2s;
-  }
-  th {
-    font-weight: 700;
-    font-size: 0.7rem;
-    color: var(--dim);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background: transparent;
+  .schedule-table th {
+    padding: 8px 10px;
     text-align: center;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    background: transparent;
   }
-  th.aktif {
+  .schedule-table th.col-kelas,
+  .schedule-table th.col-waktu { text-align: left; }
+  .schedule-table th.aktif {
     background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(6,182,212,0.2));
     color: #fff;
-    border-color: rgba(139,92,246,0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(139,92,246,0.4);
     box-shadow: 0 4px 16px rgba(139,92,246,0.2);
   }
-  th:first-child, th:nth-child(2) { text-align: left; }
 
-  td { border-color: var(--border); vertical-align: middle; }
-  td.aktif {
-    background: rgba(139,92,246,0.06);
-    border-color: rgba(139,92,246,0.2);
-  }
-
-  td.td-waktu {
-    white-space: nowrap;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.74rem;
-    color: var(--accent-2);
-    font-weight: 500;
-    background: rgba(6,182,212,0.05);
+  .schedule-table td {
+    padding: 8px 10px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    vertical-align: middle;
     text-align: center;
   }
-
-  td.td-lokasi {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-align: center;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  td.td-lokasi:hover {
-    background: rgba(6,182,212,0.12);
-    border-color: rgba(6,182,212,0.3);
-    color: var(--text);
-  }
-
-  td.td-hari {
-    min-width: 92px;
-    font-size: 0.76rem;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    line-height: 1.35;
-  }
-  td.td-hari:hover {
-    background: rgba(139,92,246,0.14);
-    border-color: rgba(139,92,246,0.3);
-    transform: translateY(-1px);
-  }
-  td.td-hari.kosong { color: var(--dim); }
-
-  .hint {
+  .schedule-table td.col-kelas {
+    font-weight: 800;
     font-size: 0.72rem;
-    color: var(--dim);
-    margin: 14px 0 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    line-height: 1.5;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
   }
-  .hint::before {
-    content: '💡';
+  .schedule-table td.col-kelas[data-kelas="regoff"] { color: #a78bfa; }
+  .schedule-table td.col-kelas[data-kelas="regon"]  { color: #38bdf8; }
+  .schedule-table td.col-kelas[data-kelas="dsmb"]   { color: #34d399; }
+  .schedule-table td.col-kelas[data-kelas="mahasantri"] { color: #fbbf24; }
+
+  .schedule-table td.col-waktu {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent-2);
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .schedule-table td.cell-day { }
+  .schedule-table td.cell-day.aktif {
+    background: rgba(139,92,246,0.08);
+    border-color: rgba(139,92,246,0.22);
+  }
+  .schedule-table .sc-mapel {
+    font-weight: 700;
+    font-size: 0.68rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .schedule-table .sc-tutor {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+  .schedule-table .sc-empty {
+    color: var(--dim);
+    font-size: 0.68rem;
+  }
+
+  /* ====== Section Program ====== */
+  .prog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .prog-header .prog-num {
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    display: grid; place-items: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .prog-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.01em;
+    background: linear-gradient(120deg, #fff 40%, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .prog-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 1px;
+  }
+  .prog-header .head-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-shrink: 0;
   }
 
-  /* ====== Hasil & Tombol ====== */
+  .jadwal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .jadwal-item {
+    background: rgba(0,0,0,0.22);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: border-color .2s;
+  }
+  .jadwal-item:hover { border-color: var(--border-2); }
+
+  .jadwal-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    font-size: 0.78rem;
+  }
+  .jadwal-time {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-2);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .jadwal-loc {
+    color: var(--muted);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .jadwal-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    padding: 8px 13px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all .18s;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+  .pill:hover { transform: translateY(-1px); }
+  .pill .edit-ico {
+    font-size: 0.68rem;
+    opacity: 0.45;
+    transition: opacity .18s;
+  }
+  .pill:hover .edit-ico { opacity: 1; }
+
+  .pill-mapel {
+    background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(6,182,212,0.12));
+    border-color: rgba(139,92,246,0.35);
+  }
+  .pill-mapel:hover {
+    background: linear-gradient(135deg, rgba(139,92,246,0.32), rgba(6,182,212,0.22));
+    border-color: rgba(139,92,246,0.6);
+  }
+
+  .pill-tutor {
+    background: linear-gradient(135deg, rgba(16,185,129,0.16), rgba(6,182,212,0.12));
+    border-color: rgba(16,185,129,0.32);
+  }
+  .pill-tutor:hover {
+    background: linear-gradient(135deg, rgba(16,185,129,0.3), rgba(6,182,212,0.22));
+    border-color: rgba(16,185,129,0.55);
+  }
+
+  .pill-empty {
+    color: var(--muted);
+    border-style: dashed;
+    border-color: rgba(148,163,184,0.3);
+  }
+  .pill-empty:hover {
+    color: var(--text);
+    border-color: rgba(139,92,246,0.5);
+  }
+
+  .no-jadwal {
+    padding: 22px 16px;
+    text-align: center;
+    color: var(--dim);
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(0,0,0,0.15);
+    border: 1px dashed var(--border-2);
+    border-radius: 12px;
+  }
+
+  /* ====== Hasil ====== */
   .hasil-head {
     display: flex;
     align-items: center;
@@ -360,7 +515,7 @@
     flex-wrap: wrap;
   }
   .hasil-label {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
@@ -371,7 +526,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.76rem;
     line-height: 1.7;
-    min-height: 320px;
+    min-height: 260px;
     background: #06060d;
     color: #cbd5e1;
     border: 1px solid var(--border);
@@ -396,8 +551,6 @@
     align-items: center;
     gap: 7px;
     transition: all .2s;
-    position: relative;
-    overflow: hidden;
     flex-shrink: 0;
   }
   .copy-btn {
@@ -405,17 +558,10 @@
     background: linear-gradient(135deg, #8b5cf6, #06b6d4);
     box-shadow: 0 6px 20px rgba(139,92,246,0.35);
   }
-  .copy-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #06b6d4, #8b5cf6);
-    opacity: 0;
-    transition: opacity .3s;
+  .copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(139,92,246,0.45);
   }
-  .copy-btn > * { position: relative; z-index: 1; }
-  .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(139,92,246,0.45); }
-  .copy-btn:hover::before { opacity: 1; }
   .copy-btn:active { transform: translateY(0); }
   .copy-btn.ok {
     background: linear-gradient(135deg, #10b981, #059669);
@@ -429,10 +575,8 @@
   .wa-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(34,197,94,0.45);
-    background: linear-gradient(135deg, #16a34a, #22c55e);
   }
   .wa-btn:active { transform: translateY(0); }
-  .wa-btn > * { position: relative; z-index: 1; }
 
   /* ====== Modal ====== */
   .modal-overlay {
@@ -450,10 +594,7 @@
     pointer-events: none;
     transition: opacity .25s;
   }
-  .modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .modal-overlay.active { opacity: 1; pointer-events: auto; }
   .modal-box {
     background: #10101d;
     border: 1px solid var(--border-2);
@@ -468,13 +609,13 @@
     transition: transform .3s cubic-bezier(.2,.8,.2,1);
     box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(139,92,246,0.1);
   }
-  .modal-overlay.active .modal-box {
-    transform: scale(1) translateY(0);
-  }
+  .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
   .modal-head {
     display: flex;
     align-items: center;
     margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 6px;
   }
   .modal-head h3 {
     font-size: 0.95rem;
@@ -486,7 +627,7 @@
     -webkit-text-fill-color: transparent;
   }
   .modal-head .kelas-tag {
-    margin-left: 10px;
+    margin-left: 4px;
     font-size: 0.66rem;
     padding: 3px 9px;
     border-radius: 6px;
@@ -510,10 +651,7 @@
     transition: all .2s;
     padding: 0;
   }
-  .modal-close:hover {
-    background: var(--surface-2);
-    color: var(--text);
-  }
+  .modal-close:hover { background: var(--surface-2); color: var(--text); }
   .modal-sub {
     font-size: 0.7rem;
     color: var(--dim);
@@ -528,6 +666,7 @@
     overflow-y: auto;
     padding-right: 4px;
     margin-bottom: 4px;
+    max-height: 46vh;
   }
   .tutor-list::-webkit-scrollbar { width: 6px; }
   .tutor-list::-webkit-scrollbar-thumb {
@@ -556,7 +695,7 @@
     border-color: rgba(139,92,246,0.35);
     transform: translateX(3px);
   }
-  .tutor-item .tutor-icon { font-size: 1.05rem; line-height: 1; }
+  .tutor-item .tutor-icon { font-size: 1.05rem; line-height: 1; flex-shrink: 0; }
   .tutor-item .tutor-name { flex: 1; }
   .tutor-item .tutor-sub {
     font-size: 0.68rem;
@@ -575,12 +714,56 @@
     font-size: 0.9rem;
   }
 
+  /* Custom tutor input */
+  .custom-tutor-wrap {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .custom-tutor-wrap input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(0,0,0,0.25);
+  }
+  .custom-tutor-wrap input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(139,92,246,0.08);
+  }
+  .custom-tutor-wrap button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    flex-shrink: 0;
+  }
+  .custom-tutor-wrap button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(139,92,246,0.35);
+  }
+
   @media (max-width: 600px) {
     body { padding: 16px 12px 40px; }
     header h1 { font-size: 1.2rem; }
     .logo { width: 44px; height: 44px; font-size: 20px; border-radius: 13px; }
     .card { padding: 16px 16px; border-radius: 18px; }
-    .hasil-textarea { min-height: 260px; }
+    .hasil-textarea { min-height: 220px; }
+    .reset-btn .txt { display: none; }
+    .reset-btn { padding: 0 10px; }
   }
 </style>
 </head>
@@ -600,6 +783,11 @@
     <div class="card-head">
       <div class="card-num">1</div>
       <h2>Pilih Tanggal</h2>
+      <div class="head-actions">
+        <button class="reset-btn" id="reset-all-btn" title="Reset semua ke jadwal default Excel">
+          <span>↺</span><span class="txt">Reset Semua</span>
+        </button>
+      </div>
     </div>
     <div class="date-row">
       <div class="date-box">
@@ -612,20 +800,63 @@
     </div>
   </section>
 
-  <!-- ===== PROGRAMS (dibuat via JS) ===== -->
+  <!-- ===== 2. JADWAL LENGKAP ===== -->
+  <section class="card" id="full-card">
+    <div class="card-head">
+      <div class="card-num">2</div>
+      <h2>Jadwal Lengkap (Excel)</h2>
+      <div class="head-actions">
+        <button class="eye-btn" data-eye="full" title="Sembunyikan / Tampilkan">
+          <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+            <line x1="1" y1="1" x2="23" y2="23"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="collapse-wrap collapsed" id="collapse-full">
+      <div class="collapse-inner">
+        <div class="full-scroll">
+          <table class="schedule-table" id="schedule-table">
+            <thead>
+              <tr>
+                <th class="col-kelas">Kelas</th>
+                <th class="col-waktu">Waktu</th>
+                <th data-head="Senin">Senin</th>
+                <th data-head="Selasa">Selasa</th>
+                <th data-head="Rabu">Rabu</th>
+                <th data-head="Kamis">Kamis</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROGRAM SECTIONS ===== -->
   <div id="programs-container"></div>
 </div>
 
-<!-- ===== MODAL PILIH MATERI ===== -->
+<!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
     <div class="modal-head">
-      <h3>Pilih Materi</h3>
+      <h3 id="modal-title">Pilih</h3>
       <span class="kelas-tag" id="modal-kelas-tag">—</span>
       <button class="modal-close" id="modal-close">✕</button>
     </div>
-    <p class="modal-sub">Tutor akan otomatis terisi sesuai mapel.</p>
-    <div class="tutor-list" id="tutor-list"></div>
+    <p class="modal-sub" id="modal-sub">—</p>
+    <div class="tutor-list" id="modal-list"></div>
+    <div class="custom-tutor-wrap" id="custom-tutor-wrap" style="display:none">
+      <input type="text" id="custom-tutor-input" placeholder="Ketik nama tutor baru..." autocomplete="off">
+      <button id="custom-tutor-add">+ Tambah</button>
+    </div>
   </div>
 </div>
 
@@ -637,15 +868,22 @@ const HARI_PANJANG = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
 
 const WA_NUMBER = "6285717978659";
 
-/* Program (kelas) — tiap program akan jadi satu section sendiri */
 const PROGRAMS = [
-  { key: "regoff",     name: "Reguler Offline" },
-  { key: "regon",      name: "Reguler Online" },
-  { key: "dsmb",       name: "DSMB" },
-  { key: "mahasantri", name: "Mahasantri" }
+  { key: "regoff",     name: "Reguler Offline", icon: "📚" },
+  { key: "regon",      name: "Reguler Online",  icon: "💻" },
+  { key: "dsmb",       name: "DSMB",            icon: "🎯" },
+  { key: "mahasantri", name: "Mahasantri",      icon: "🕌" }
 ];
 
-/* Mapel → Tutor (auto), per program, sesuai Excel */
+/* Tutor PER PROGRAM — tidak dicampur */
+const TUTORS_BY_PROGRAM = {
+  regoff:     ["MS. DHITA", "MS. LASMI", "MS. ROSNANI", "MS. ERN"],
+  regon:      ["MS. DHITA", "MS. LASMI", "MS. ERN", "MR. ALAN"],
+  dsmb:       ["MS. ERN", "MS. NANI", "MS. LASMI", "RENDI SENSEI"],
+  mahasantri: ["MS. DHITA", "MS. ROSNANI", "USTAZAH IMPI", "MS. ERN"]
+};
+
+/* Default mapel → tutor (dari Excel) */
 const TUTOR_BY_MAPEL = {
   regoff: {
     "VOCABULARY": "MS. DHITA",
@@ -663,8 +901,8 @@ const TUTOR_BY_MAPEL = {
     "SPEAKING": "MS. ERN",
     "GRAMMAR": "MS. NANI",
     "EXPRESSION & VOCABULARY": "MS. LASMI",
-    "HIRGANA, KATAKANA, TANGGO": "RENDI SENSEI",
-    "MANAKIBAN": ""
+    "HIRGANA, KATAKANA, TANGGO": "RENDI SENSEI"
+    /* MANAKIBAN dihapus */
   },
   mahasantri: {
     "EXPRESSIONS & VOCABULARY": "MS. DHITA",
@@ -674,7 +912,7 @@ const TUTOR_BY_MAPEL = {
   }
 };
 
-/* Data jadwal dari Excel (Jumat dihapus — tidak ada jadwal) */
+/* Data jadwal default (Manakiban dihapus, Jumat tidak ada) */
 const DATA = [
   { prog: "regoff", lokasi: "RPS", waktu: "09.00-10.30",
     hari: { Senin: "VOCABULARY", Selasa: "EXPRESSION", Rabu: "GRAMMAR", Kamis: "SPEAKING" } },
@@ -687,7 +925,7 @@ const DATA = [
   { prog: "dsmb", lokasi: "RPS", waktu: "16.00-17.30",
     hari: { Senin: "SPEAKING", Selasa: "GRAMMAR", Rabu: "HIRGANA, KATAKANA, TANGGO", Kamis: "GRAMMAR" } },
   { prog: "dsmb", lokasi: "RPS", waktu: "20.00-21.30",
-    hari: { Senin: "EXPRESSION & VOCABULARY", Selasa: "HIRGANA, KATAKANA, TANGGO", Rabu: "MANAKIBAN", Kamis: "HIRGANA, KATAKANA, TANGGO" } },
+    hari: { Senin: "EXPRESSION & VOCABULARY", Selasa: "HIRGANA, KATAKANA, TANGGO", Rabu: "", Kamis: "HIRGANA, KATAKANA, TANGGO" } },
 
   { prog: "mahasantri", lokasi: "RPS", waktu: "16.00-17.00",
     hari: { Senin: "", Selasa: "", Rabu: "EXPRESSIONS & VOCABULARY", Kamis: "" } },
@@ -697,6 +935,12 @@ const DATA = [
 
 const SAPAAN  = "Assalamu'alaikum warahmatullahi Wabarakatuh ";
 const PENUTUP = "Sekian informasi yang dapat kami sampaikan, Wassalamu'alaikum warahmatullahi Wabarakatuh ☺️🙏🏻";
+
+/* ================== SESSION STATE ================== */
+/* { [progKey]: { [waktu]: { mapel?, tutor? } } } — berlaku untuk hari yang sedang dipilih */
+let sessionOverrides = {};
+/* Tutor custom per program (ketik manual) */
+let customTutors = { regoff: [], regon: [], dsmb: [], mahasantri: [] };
 
 /* ================== HELPER ================== */
 function isKosong(v) {
@@ -726,11 +970,102 @@ function getDayFromDate(val) {
   if (!val) return 'Senin';
   const d = new Date(val + 'T00:00:00');
   if (isNaN(d)) return 'Senin';
-  const n = HARI_PANJANG[d.getDay()];
-  return HARI.includes(n) ? n : 'Senin';
+  return HARI_PANJANG[d.getDay()];
+}
+function isValidDay(day) { return HARI.includes(day); }
+function getToday() { return getDayFromDate(document.getElementById('tanggal').value); }
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escAttr(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 }
 
-/* ================== BUILD UI PER PROGRAM ================== */
+function getRow(progKey, waktu) {
+  return DATA.find(r => r.prog === progKey && r.waktu === waktu);
+}
+function getTutorsForProgram(progKey) {
+  const base = TUTORS_BY_PROGRAM[progKey] || [];
+  const custom = customTutors[progKey] || [];
+  const seen = new Set();
+  const out = [];
+  [...base, ...custom].forEach(t => {
+    const k = t.toLowerCase();
+    if (!seen.has(k)) { seen.add(k); out.push(t); }
+  });
+  return out;
+}
+function getMapelForProgram(progKey) {
+  const set = new Set();
+  DATA.filter(r => r.prog === progKey).forEach(r => {
+    HARI.forEach(h => {
+      const m = (r.hari[h] || '').trim();
+      if (m) set.add(m);
+    });
+  });
+  return [...set];
+}
+
+/* Effective value: hanya override diterapkan kalau `day` adalah hari yang sedang dipilih */
+function getEffective(progKey, row, day) {
+  const today = getToday();
+  const isToday = (day === today);
+  const ov = (isToday && sessionOverrides[progKey] && sessionOverrides[progKey][row.waktu]) || {};
+  const defaultMapel = (row.hari[day] || '').trim();
+  const mapel = ('mapel' in ov) ? ov.mapel : defaultMapel;
+  let tutor;
+  if ('tutor' in ov) {
+    tutor = ov.tutor;
+  } else {
+    tutor = mapel ? ((TUTOR_BY_MAPEL[progKey] || {})[mapel] || '') : '';
+  }
+  return { mapel, tutor };
+}
+
+/* ================== RENDER JADWAL LENGKAP ================== */
+function renderFullSchedule() {
+  const tbody = document.querySelector('#schedule-table tbody');
+  tbody.innerHTML = '';
+  const today = getToday();
+
+  DATA.forEach(r => {
+    const prog = PROGRAMS.find(p => p.key === r.prog);
+    const tr = document.createElement('tr');
+
+    const tdK = document.createElement('td');
+    tdK.className = 'col-kelas';
+    tdK.dataset.kelas = r.prog;
+    tdK.textContent = prog.name;
+    tr.appendChild(tdK);
+
+    const tdW = document.createElement('td');
+    tdW.className = 'col-waktu';
+    tdW.textContent = r.waktu;
+    tr.appendChild(tdW);
+
+    HARI.forEach(h => {
+      const td = document.createElement('td');
+      td.className = 'cell-day' + (h === today ? ' aktif' : '');
+      const eff = getEffective(r.prog, r, h);
+      if (isKosong(eff.mapel)) {
+        td.innerHTML = `<span class="sc-empty">—</span>`;
+      } else {
+        td.innerHTML = `<div class="sc-mapel">${escHtml(eff.mapel)}</div>` +
+                       (eff.tutor ? `<div class="sc-tutor">${icon(eff.tutor)} ${escHtml(eff.tutor)}</div>` : '');
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  /* Highlight header */
+  document.querySelectorAll('#schedule-table th[data-head]').forEach(th => {
+    th.classList.toggle('aktif', th.dataset.head === today);
+  });
+}
+
+/* ================== BUILD UI PROGRAM ================== */
 function buildProgramSections() {
   const container = document.getElementById('programs-container');
   container.innerHTML = '';
@@ -742,36 +1077,32 @@ function buildProgramSections() {
     sec.style.animationDelay = (0.05 * (i + 1)) + 's';
 
     sec.innerHTML = `
-      <div class="card-head">
-        <div class="card-num">${i + 2}</div>
-        <h2>${p.name}</h2>
-        <button class="eye-btn on" data-eye="tabel-${p.key}" title="Sembunyikan / Tampilkan tabel">
-          <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-            <line x1="1" y1="1" x2="23" y2="23"/>
-          </svg>
-        </button>
+      <div class="prog-header">
+        <div class="prog-num">${i + 3}</div>
+        <div>
+          <h3 class="prog-title">${p.icon} ${p.name}</h3>
+          <div class="prog-sub" id="prog-sub-${p.key}">—</div>
+        </div>
+        <div class="head-actions">
+          <button class="reset-btn" data-reset="${p.key}" title="Reset ke default Excel">
+            <span>↺</span><span class="txt">Reset</span>
+          </button>
+          <button class="eye-btn" data-eye="${p.key}" title="Sembunyikan / Tampilkan">
+            <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <div class="collapsible-wrap collapsed" id="tabel-${p.key}-wrap">
-        <div class="collapsible-inner">
-          <div class="table-scroll">
-            <table id="tabel-${p.key}">
-              <thead>
-                <tr>
-                  <th style="min-width:110px">Waktu</th>
-                  <th style="min-width:80px">Lokasi</th>
-                  ${HARI.map(h => `<th data-head="${h}">${h}</th>`).join('')}
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <p class="hint">Klik sel mapel untuk memilih materi (tutor otomatis). Klik sel lokasi untuk mengubah.</p>
+      <div class="collapse-wrap collapsed" id="collapse-${p.key}">
+        <div class="collapse-inner">
+          <div class="jadwal-list" id="list-${p.key}"></div>
         </div>
       </div>
 
@@ -789,82 +1120,85 @@ function buildProgramSections() {
     container.appendChild(sec);
   });
 
-  PROGRAMS.forEach(p => renderTableBody(p.key));
   attachEvents();
 }
 
-/* ================== RENDER TABEL PER PROGRAM ================== */
-function renderTableBody(progKey) {
-  const tbody = document.querySelector(`#tabel-${progKey} tbody`);
-  tbody.innerHTML = '';
+/* ================== RENDER LIST PER PROGRAM ================== */
+function renderListContent(progKey) {
+  const listEl = document.getElementById(`list-${progKey}`);
+  const subEl = document.getElementById(`prog-sub-${progKey}`);
+  if (!listEl) return;
 
-  DATA.filter(r => r.prog === progKey).forEach(r => {
-    const tr = document.createElement('tr');
-    tr.dataset.waktu = r.waktu;
-    tr.dataset.lokasi = r.lokasi;
+  const tanggal = document.getElementById('tanggal').value;
+  const day = getToday();
 
-    const tdW = document.createElement('td');
-    tdW.className = 'td-waktu';
-    tdW.textContent = r.waktu;
-    tr.appendChild(tdW);
+  subEl.textContent = `📅 Jadwal hari ${day}, ${tanggalPanjang(tanggal)}`;
 
-    const tdL = document.createElement('td');
-    tdL.className = 'td-lokasi';
-    tdL.textContent = r.lokasi;
-    tdL.addEventListener('click', () => {
-      const nv = prompt('Ubah lokasi:', tdL.textContent.trim());
-      if (nv !== null) {
-        tdL.textContent = nv.trim() || '-';
-        buildMessageFor(progKey);
-      }
+  if (!isValidDay(day)) {
+    listEl.innerHTML = `<div class="no-jadwal">Tidak ada jadwal untuk hari ${day}.</div>`;
+    return;
+  }
+
+  const rows = DATA.filter(r => r.prog === progKey);
+  const items = [];
+  rows.forEach(r => {
+    const eff = getEffective(progKey, r, day);
+    if (isKosong(eff.mapel)) return;
+    items.push({ waktu: r.waktu, lokasi: r.lokasi, mapel: eff.mapel, tutor: eff.tutor });
+  });
+  items.sort((a, b) => parseTime(a.waktu) - parseTime(b.waktu));
+
+  if (!items.length) {
+    listEl.innerHTML = `<div class="no-jadwal">Tidak ada jadwal untuk program ini hari ${day}.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = items.map(it => `
+    <div class="jadwal-item">
+      <div class="jadwal-meta">
+        <span class="jadwal-time">⏰ ${escHtml(formatWaktu(it.waktu))}</span>
+        <span class="jadwal-loc">📍 ${escHtml(it.lokasi)}</span>
+      </div>
+      <div class="jadwal-pills">
+        <button class="pill pill-mapel" data-action="mapel" data-prog="${progKey}" data-waktu="${escAttr(it.waktu)}" title="Ganti materi">
+          <span>🔰</span>
+          <span>${escHtml(it.mapel)}</span>
+          <span class="edit-ico">✏️</span>
+        </button>
+        ${it.tutor ? `
+          <button class="pill pill-tutor" data-action="tutor" data-prog="${progKey}" data-waktu="${escAttr(it.waktu)}" title="Ganti tutor (sementara)">
+            <span>${icon(it.tutor)}</span>
+            <span>${escHtml(it.tutor)}</span>
+            <span class="edit-ico">✏️</span>
+          </button>
+        ` : `
+          <button class="pill pill-tutor pill-empty" data-action="tutor" data-prog="${progKey}" data-waktu="${escAttr(it.waktu)}" title="Pilih tutor">
+            <span>👤</span>
+            <span>Pilih Tutor</span>
+            <span class="edit-ico">+</span>
+          </button>
+        `}
+      </div>
+    </div>
+  `).join('');
+
+  listEl.querySelectorAll('button[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const { action, prog, waktu } = btn.dataset;
+      openModal(action, prog, waktu);
     });
-    tr.appendChild(tdL);
-
-    HARI.forEach(h => {
-      const td = document.createElement('td');
-      td.className = 'td-hari';
-      td.dataset.hari = h;
-      const v = (r.hari[h] || '').trim();
-      td.textContent = v || '—';
-      if (!v) td.classList.add('kosong');
-      td.addEventListener('click', () => openModal(td, progKey));
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
   });
 }
 
-/* ================== READ TABEL ================== */
-function readTabel(progKey) {
-  return [...document.querySelectorAll(`#tabel-${progKey} tbody tr`)].map(tr => {
-    const hari = {};
-    HARI.forEach(h => {
-      hari[h] = tr.querySelector(`td[data-hari="${h}"]`).textContent.trim();
-    });
-    return {
-      lokasi: tr.querySelector('td.td-lokasi').textContent.trim(),
-      waktu: tr.dataset.waktu,
-      hari
-    };
-  });
+function renderAllPrograms() {
+  PROGRAMS.forEach(p => renderListContent(p.key));
 }
 
-/* ================== BUILD MESSAGE PER PROGRAM ================== */
+/* ================== BUILD MESSAGE ================== */
 function buildMessageFor(progKey) {
   const prog = PROGRAMS.find(p => p.key === progKey);
   const tanggal = document.getElementById('tanggal').value;
-  const day = getDayFromDate(tanggal);
-
-  const rows = readTabel(progKey);
-  const items = [];
-  rows.forEach(r => {
-    const mapel = (r.hari[day] || '').trim();
-    if (isKosong(mapel)) return;
-    const tutor = (TUTOR_BY_MAPEL[progKey] || {})[mapel] || '';
-    items.push({ waktu: r.waktu, lokasi: r.lokasi, mapel, tutor });
-  });
-  items.sort((a, b) => parseTime(a.waktu) - parseTime(b.waktu));
+  const day = getToday();
 
   const lines = [];
   lines.push(SAPAAN);
@@ -873,17 +1207,31 @@ function buildMessageFor(progKey) {
   lines.push('');
   lines.push(`📅 : ${day}, ${tanggalPanjang(tanggal)}`);
 
-  if (!items.length) {
+  if (!isValidDay(day)) {
     lines.push('');
-    lines.push('(Tidak ada jadwal pada hari ini)');
+    lines.push(`(Tidak ada jadwal pada hari ${day})`);
   } else {
-    items.forEach(s => {
-      lines.push('');
-      lines.push(`        ⏰ : ${formatWaktu(s.waktu)}`);
-      lines.push(`        📍 : ${s.lokasi}`);
-      lines.push(`        🔰 : ${s.mapel}`);
-      if (s.tutor) lines.push(`        ${icon(s.tutor)} : ${s.tutor}`);
+    const rows = DATA.filter(r => r.prog === progKey);
+    const items = [];
+    rows.forEach(r => {
+      const eff = getEffective(progKey, r, day);
+      if (isKosong(eff.mapel)) return;
+      items.push({ waktu: r.waktu, lokasi: r.lokasi, mapel: eff.mapel, tutor: eff.tutor });
     });
+    items.sort((a, b) => parseTime(a.waktu) - parseTime(b.waktu));
+
+    if (!items.length) {
+      lines.push('');
+      lines.push('(Tidak ada jadwal pada hari ini)');
+    } else {
+      items.forEach(s => {
+        lines.push('');
+        lines.push(`        ⏰ : ${formatWaktu(s.waktu)}`);
+        lines.push(`        📍 : ${s.lokasi}`);
+        lines.push(`        🔰 : ${s.mapel}`);
+        if (s.tutor) lines.push(`        ${icon(s.tutor)} : ${s.tutor}`);
+      });
+    }
   }
 
   lines.push('');
@@ -896,33 +1244,179 @@ function buildAllMessages() {
   PROGRAMS.forEach(p => buildMessageFor(p.key));
 }
 
-/* ================== HARI BADGE & HIGHLIGHT ================== */
-function updateDayAndHighlight() {
-  const val = document.getElementById('tanggal').value;
-  const day = getDayFromDate(val);
-  document.getElementById('day-label').textContent = day;
+function renderAll() {
+  renderFullSchedule();
+  renderAllPrograms();
+  buildAllMessages();
+}
 
-  document.querySelectorAll('th[data-head]').forEach(th => {
-    th.classList.toggle('aktif', th.dataset.head === day);
-  });
-  document.querySelectorAll('td[data-hari]').forEach(td => {
-    td.classList.toggle('aktif', td.dataset.hari === day);
-  });
+/* ================== DAY BADGE ================== */
+function updateDayBadge() {
+  const day = getToday();
+  document.getElementById('day-label').textContent = day;
+}
+
+/* ================== MODAL ================== */
+let modalState = { type: null, progKey: null, waktu: null };
+
+function openModal(type, progKey, waktu) {
+  modalState = { type, progKey, waktu };
+  renderModalContent();
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  modalState = { type: null, progKey: null, waktu: null };
+}
+
+function renderModalContent() {
+  const { type, progKey, waktu } = modalState;
+  const prog = PROGRAMS.find(p => p.key === progKey);
+  const titleEl = document.getElementById('modal-title');
+  const subEl = document.getElementById('modal-sub');
+  const tagEl = document.getElementById('modal-kelas-tag');
+  const list = document.getElementById('modal-list');
+  const customWrap = document.getElementById('custom-tutor-wrap');
+
+  tagEl.textContent = prog ? prog.name : '—';
+  list.innerHTML = '';
+
+  if (type === 'tutor') {
+    titleEl.textContent = '👩‍🏫 Pilih Tutor';
+    subEl.textContent = 'Pilih tutor pengganti untuk jam ini (sementara). Atau ketik nama baru di bawah.';
+    customWrap.style.display = 'flex';
+    document.getElementById('custom-tutor-input').value = '';
+
+    const currentTutor = getCurrentTutor(progKey, waktu);
+
+    /* Opsi kosong */
+    const emptyBtn = document.createElement('button');
+    emptyBtn.className = 'tutor-item' + (currentTutor === '' ? ' selected' : '');
+    emptyBtn.innerHTML = `<span class="tutor-icon">—</span><span class="tutor-name">Kosong</span><span class="tutor-sub">tanpa tutor</span>`;
+    emptyBtn.onclick = () => pickTutor('');
+    list.appendChild(emptyBtn);
+
+    getTutorsForProgram(progKey).forEach(t => {
+      const isF = isFemale(t);
+      const btn = document.createElement('button');
+      btn.className = 'tutor-item' + (currentTutor === t ? ' selected' : '');
+      btn.innerHTML = `<span class="tutor-icon">${isF ? '👩‍🏫' : '👨‍🏫'}</span><span class="tutor-name">${escHtml(t)}</span>`;
+      btn.onclick = () => pickTutor(t);
+      list.appendChild(btn);
+    });
+  } else {
+    titleEl.textContent = '🔰 Pilih Materi';
+    subEl.textContent = 'Ganti materi untuk jam ini. Tutor default mapel baru akan dipakai.';
+    customWrap.style.display = 'none';
+
+    const currentMapel = getCurrentMapel(progKey, waktu);
+
+    const emptyBtn = document.createElement('button');
+    emptyBtn.className = 'tutor-item' + (currentMapel === '' ? ' selected' : '');
+    emptyBtn.innerHTML = `<span class="tutor-icon">—</span><span class="tutor-name">Kosong</span><span class="tutor-sub">hapus</span>`;
+    emptyBtn.onclick = () => pickMapel('');
+    list.appendChild(emptyBtn);
+
+    getMapelForProgram(progKey).forEach(m => {
+      const defTutor = (TUTOR_BY_MAPEL[progKey] || {})[m] || '';
+      const btn = document.createElement('button');
+      btn.className = 'tutor-item' + (currentMapel === m ? ' selected' : '');
+      btn.innerHTML =
+        `<span class="tutor-icon">🔰</span>` +
+        `<span class="tutor-name">${escHtml(m)}</span>` +
+        `<span class="tutor-sub">${defTutor ? escHtml(defTutor) : '—'}</span>`;
+      btn.onclick = () => pickMapel(m);
+      list.appendChild(btn);
+    });
+  }
+}
+
+function getCurrentMapel(progKey, waktu) {
+  const row = getRow(progKey, waktu);
+  if (!row) return '';
+  const day = getToday();
+  if (!isValidDay(day)) return '';
+  const ov = (sessionOverrides[progKey] && sessionOverrides[progKey][waktu]) || {};
+  if ('mapel' in ov) return ov.mapel;
+  return (row.hari[day] || '').trim();
+}
+
+function getCurrentTutor(progKey, waktu) {
+  const day = getToday();
+  if (!isValidDay(day)) return '';
+  const mapel = getCurrentMapel(progKey, waktu);
+  const ov = (sessionOverrides[progKey] && sessionOverrides[progKey][waktu]) || {};
+  if ('tutor' in ov) return ov.tutor;
+  return mapel ? ((TUTOR_BY_MAPEL[progKey] || {})[mapel] || '') : '';
+}
+
+function pickTutor(name) {
+  const { progKey, waktu } = modalState;
+  if (!sessionOverrides[progKey]) sessionOverrides[progKey] = {};
+  if (!sessionOverrides[progKey][waktu]) sessionOverrides[progKey][waktu] = {};
+  sessionOverrides[progKey][waktu].tutor = name;
+  closeModal();
+  renderAll();
+}
+
+function pickMapel(name) {
+  const { progKey, waktu } = modalState;
+  if (!sessionOverrides[progKey]) sessionOverrides[progKey] = {};
+  if (!sessionOverrides[progKey][waktu]) sessionOverrides[progKey][waktu] = {};
+  sessionOverrides[progKey][waktu].mapel = name;
+  delete sessionOverrides[progKey][waktu].tutor;
+  closeModal();
+  renderAll();
+}
+
+function addCustomTutor() {
+  const input = document.getElementById('custom-tutor-input');
+  const name = input.value.trim();
+  if (!name) return;
+  const progKey = modalState.progKey;
+
+  /* Simpan ke custom list kalau belum ada (di default maupun custom) */
+  const all = getTutorsForProgram(progKey).map(t => t.toLowerCase());
+  if (!all.includes(name.toLowerCase())) {
+    customTutors[progKey].push(name);
+  }
+
+  /* Langsung pilih tutor ini */
+  pickTutor(name);
+}
+
+document.getElementById('custom-tutor-add').addEventListener('click', addCustomTutor);
+document.getElementById('custom-tutor-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addCustomTutor(); }
+});
+
+/* ================== RESET ================== */
+function resetProgram(progKey) {
+  sessionOverrides[progKey] = {};
+  renderAll();
+}
+function resetAll() {
+  sessionOverrides = {};
+  customTutors = { regoff: [], regon: [], dsmb: [], mahasantri: [] };
+  renderAll();
 }
 
 /* ================== EVENTS ================== */
 function attachEvents() {
-  /* Eye toggle per tabel */
-  document.querySelectorAll('.eye-btn').forEach(btn => {
+  document.querySelectorAll('.eye-btn[data-eye]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const key = btn.dataset.eye; // e.g. tabel-regoff
-      const wrap = document.getElementById(key + '-wrap');
+      const key = btn.dataset.eye;
+      const wrap = document.getElementById('collapse-' + key);
+      if (!wrap) return;
       const isCollapsed = wrap.classList.toggle('collapsed');
       btn.classList.toggle('on', !isCollapsed);
     });
   });
 
-  /* Copy button */
+  document.querySelectorAll('.reset-btn[data-reset]').forEach(btn => {
+    btn.addEventListener('click', () => resetProgram(btn.dataset.reset));
+  });
+
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async function () {
       const key = this.dataset.copy;
@@ -949,8 +1443,7 @@ function attachEvents() {
     });
   });
 
-  /* WhatsApp button */
-  document.querySelectorAll('.wa-btn').forEach(btn => {
+  document.querySelectorAll('.wa-btn[data-wa]').forEach(btn => {
     btn.addEventListener('click', function () {
       const key = this.dataset.wa;
       const text = document.getElementById('hasil-' + key).value || '';
@@ -960,59 +1453,7 @@ function attachEvents() {
   });
 }
 
-/* ================== MODAL PILIH MATERI ================== */
-let activeCell = null;
-let activeProg = null;
-
-function openModal(td, progKey) {
-  activeCell = td;
-  activeProg = progKey;
-  renderSubjectList();
-  document.getElementById('modal').classList.add('active');
-}
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
-  activeCell = null;
-  activeProg = null;
-}
-function renderSubjectList() {
-  const list = document.getElementById('tutor-list');
-  const tag = document.getElementById('modal-kelas-tag');
-  const current = activeCell ? activeCell.textContent.trim() : '';
-  const prog = PROGRAMS.find(p => p.key === activeProg);
-  tag.textContent = prog ? prog.name : '—';
-
-  list.innerHTML = '';
-
-  const empty = document.createElement('button');
-  empty.className = 'tutor-item' + (isKosong(current) ? ' selected' : '');
-  empty.innerHTML = `<span class="tutor-icon">—</span><span class="tutor-name">Kosong</span><span class="tutor-sub">hapus</span>`;
-  empty.onclick = () => selectSubject('');
-  list.appendChild(empty);
-
-  const map = TUTOR_BY_MAPEL[activeProg] || {};
-  Object.keys(map).forEach(mapel => {
-    const tutor = map[mapel];
-    const isF = isFemale(tutor);
-    const btn = document.createElement('button');
-    btn.className = 'tutor-item' + (current === mapel ? ' selected' : '');
-    btn.innerHTML =
-      `<span class="tutor-icon">${isF ? '👩‍🏫' : '👨‍🏫'}</span>` +
-      `<span class="tutor-name">${mapel}</span>` +
-      `<span class="tutor-sub">${tutor || '—'}</span>`;
-    btn.onclick = () => selectSubject(mapel);
-    list.appendChild(btn);
-  });
-}
-function selectSubject(name) {
-  if (!activeCell) return;
-  activeCell.textContent = name || '—';
-  activeCell.classList.toggle('kosong', !name);
-  const prog = activeProg;
-  closeModal();
-  buildMessageFor(prog);
-}
-
+/* Modal events */
 document.getElementById('modal-close').addEventListener('click', closeModal);
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target.id === 'modal') closeModal();
@@ -1023,12 +1464,21 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* Date change */
+document.getElementById('tanggal').addEventListener('change', () => {
+  sessionOverrides = {}; // reset karena hari berganti
+  updateDayBadge();
+  renderAll();
+});
+
+/* Reset all */
+document.getElementById('reset-all-btn').addEventListener('click', resetAll);
+
 /* ================== INIT ================== */
 buildProgramSections();
 
 (function setTodayDate() {
   const el = document.getElementById('tanggal');
-  if (el.value) return;
   const now = new Date();
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -1036,13 +1486,8 @@ buildProgramSections();
   el.value = `${yyyy}-${mm}-${dd}`;
 })();
 
-document.getElementById('tanggal').addEventListener('change', () => {
-  updateDayAndHighlight();
-  buildAllMessages();
-});
-
-updateDayAndHighlight();
-buildAllMessages();
+updateDayBadge();
+renderAll();
 </script>
 </body>
 </html>
