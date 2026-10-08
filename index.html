@@ -877,60 +877,60 @@ const PROGRAMS = [
 
 /* Tutor PER PROGRAM — tidak dicampur */
 const TUTORS_BY_PROGRAM = {
-  regoff:     ["MS. DHITA", "MS. LASMI", "MS. ROSNANI", "MS. ERN"],
-  regon:      ["MS. DHITA", "MS. LASMI", "MS. ERN", "MR. ALAN"],
-  dsmb:       ["MS. ERN", "MS. NANI", "MS. LASMI", "RENDI SENSEI"],
-  mahasantri: ["MS. DHITA", "MS. ROSNANI", "USTAZAH IMPI", "MS. ERN"]
+  regoff:     ["Ms. Dhita", "Ms. Lasmi", "Ms. Rosnani", "Ms. Ern"],
+  regon:      ["Ms. Dhita", "Ms. Lasmi", "Ms. Ern", "Mr. Alan"],
+  dsmb:       ["Ms. Ern", "Ms. Rosnani", "Ms. Lasmi", "Rendi Sensei"],
+  mahasantri: ["Ms. Dhita", "Ms. Rosnani", "Ustdzh Impi", "Ms. Ern"]
 };
 
 /* Default mapel → tutor (dari Excel) */
 const TUTOR_BY_MAPEL = {
   regoff: {
-    "VOCABULARY": "MS. DHITA",
-    "EXPRESSION": "MS. LASMI",
-    "GRAMMAR": "MS. ROSNANI",
-    "SPEAKING": "MS. ERN"
+    "Vocabulary": "Ms. Dhita",
+    "Expression": "Ms. Lasmi",
+    "Grammar": "Ms. Rosnani",
+    "Speaking": "Ms. Ern"
   },
   regon: {
-    "VOCABULARY": "MS. DHITA",
-    "CONVERSATION": "MR. ALAN",
-    "SPEAKING": "MS. ERN",
-    "EXPRESSION": "MS. LASMI"
+    "Vocabulary": "Ms. Dhita",
+    "Conversation": "Mr. Alan",
+    "Speaking": "Ms. Ern",
+    "Expression": "Ms. Lasmi"
   },
   dsmb: {
-    "SPEAKING": "MS. ERN",
-    "GRAMMAR": "MS. NANI",
-    "EXPRESSION & VOCABULARY": "MS. LASMI",
-    "HIRGANA, KATAKANA, TANGGO": "RENDI SENSEI"
+    "Speaking": "Ms. Ern",
+    "Grammar": "Ms. Rosnani",
+    "Expression & Vocabulary": "Ms. Lasmi",
+    "Bahasa Jepang": "Rendi Sensei"
     /* MANAKIBAN dihapus */
   },
   mahasantri: {
-    "EXPRESSIONS & VOCABULARY": "MS. DHITA",
-    "GRAMMAR & INTERVIEW": "MS. ROSNANI",
-    "KALAM & MUFRADHAT": "USTAZAH IMPI",
-    "SPEAKING & CONVERSATION": "MS. ERN"
+    "ExpressionS & Vocabulary": "Ms. Dhita",
+    "Grammar & Interview": "Ms. Rosnani",
+    "Kalam & Mufradhat": "Ustdzh Impi",
+    "Speaking & Conversation": "Ms. Ern"
   }
 };
 
 /* Data jadwal default (Manakiban dihapus, Jumat tidak ada) */
 const DATA = [
   { prog: "regoff", lokasi: "RPS", waktu: "09.00-10.30",
-    hari: { Senin: "VOCABULARY", Selasa: "EXPRESSION", Rabu: "GRAMMAR", Kamis: "SPEAKING" } },
+    hari: { Senin: "Vocabulary", Selasa: "Expression", Rabu: "Grammar", Kamis: "Speaking" } },
 
   { prog: "regon", lokasi: "Online", waktu: "16.00-17.31",
-    hari: { Senin: "VOCABULARY", Selasa: "VOCABULARY", Rabu: "SPEAKING", Kamis: "EXPRESSION" } },
+    hari: { Senin: "Vocabulary", Selasa: "Vocabulary", Rabu: "Speaking", Kamis: "Expression" } },
   { prog: "regon", lokasi: "Online", waktu: "20.00-21.30",
-    hari: { Senin: "CONVERSATION", Selasa: "CONVERSATION", Rabu: "SPEAKING", Kamis: "EXPRESSION" } },
+    hari: { Senin: "Conversation", Selasa: "Conversation", Rabu: "Speaking", Kamis: "Expression" } },
 
   { prog: "dsmb", lokasi: "RPS", waktu: "16.00-17.30",
-    hari: { Senin: "SPEAKING", Selasa: "GRAMMAR", Rabu: "HIRGANA, KATAKANA, TANGGO", Kamis: "GRAMMAR" } },
+    hari: { Senin: "Speaking", Selasa: "Grammar", Rabu: "Bahasa Jepang", Kamis: "Grammar" } },
   { prog: "dsmb", lokasi: "RPS", waktu: "20.00-21.30",
-    hari: { Senin: "EXPRESSION & VOCABULARY", Selasa: "HIRGANA, KATAKANA, TANGGO", Rabu: "", Kamis: "HIRGANA, KATAKANA, TANGGO" } },
+    hari: { Senin: "Expression & Vocabulary", Selasa: "Bahasa Jepang", Rabu: "", Kamis: "Bahasa Jepang" } },
 
   { prog: "mahasantri", lokasi: "RPS", waktu: "16.00-17.00",
-    hari: { Senin: "", Selasa: "", Rabu: "EXPRESSIONS & VOCABULARY", Kamis: "" } },
+    hari: { Senin: "", Selasa: "", Rabu: "ExpressionS & Vocabulary", Kamis: "" } },
   { prog: "mahasantri", lokasi: "RPS", waktu: "20.00-21.00",
-    hari: { Senin: "GRAMMAR & INTERVIEW", Selasa: "KALAM & MUFRADHAT", Rabu: "", Kamis: "SPEAKING & CONVERSATION" } }
+    hari: { Senin: "Grammar & Interview", Selasa: "Kalam & Mufradhat", Rabu: "", Kamis: "Speaking & Conversation" } }
 ];
 
 const SAPAAN  = "Assalamu'alaikum warahmatullahi Wabarakatuh ";
